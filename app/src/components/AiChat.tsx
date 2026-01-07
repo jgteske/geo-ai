@@ -12,12 +12,15 @@ import rehypeHighlight from 'rehype-highlight'
 export function AiChat() {
   const [input, setInput] = useState('')
 
-  const { messages, sendMessage, isLoading, error } = useChat({
+  const { messages, sendMessage, isLoading, error, stop } = useChat({
     connection: fetchServerSentEvents('/api/chat'),
   })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (isLoading) {
+      stop()
+    }
     if (input.trim() && !isLoading) {
       sendMessage(input)
       setInput('')
@@ -94,12 +97,8 @@ export function AiChat() {
             disabled={isLoading}
             isLoading={isLoading}
           />
-          <Button
-            type="submit"
-            variant={'default'}
-            disabled={!input.trim() || isLoading}
-          >
-            Send
+          <Button type="submit" variant={'default'}>
+            {isLoading ? 'Cancel' : 'Send'}
           </Button>
         </div>
       </form>
