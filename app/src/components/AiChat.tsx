@@ -5,6 +5,9 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertCircleIcon } from 'lucide-react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import rehypeHighlight from 'rehype-highlight'
 
 export function AiChat() {
   const [input, setInput] = useState('')
@@ -51,7 +54,19 @@ export function AiChat() {
                   )
                 }
                 if (part.type === 'text') {
-                  return <div key={idx}>{part.content}</div>
+                  return (
+                    <div
+                      key={idx}
+                      className="prose prose-sm dark:prose-invert max-w-none"
+                    >
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        rehypePlugins={[rehypeHighlight]}
+                      >
+                        {part.content}
+                      </ReactMarkdown>
+                    </div>
+                  )
                 }
                 return null
               })}
