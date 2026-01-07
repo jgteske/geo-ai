@@ -17,6 +17,15 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.0.6
         version: 4.1.18(vite@7.3.0(@types/node@22.19.3)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0))
+      '@tanstack/ai':
+        specifier: ^0.2.1
+        version: 0.2.1
+      '@tanstack/ai-ollama':
+        specifier: ^0.3.0
+        version: 0.3.0(@tanstack/ai@0.2.1)(zod@3.25.76)
+      '@tanstack/ai-react':
+        specifier: ^0.2.1
+        version: 0.2.1(@tanstack/ai@0.2.1)(@types/react@19.2.7)(react@19.2.3)
       '@tanstack/react-devtools':
         specifier: ^0.7.0
         version: 0.7.11(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(csstype@3.2.3)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(solid-js@1.9.10)
@@ -41,6 +50,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       lucide-react:
         specifier: ^0.561.0
         version: 0.561.0(react@19.2.3)
@@ -1259,6 +1271,26 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7
 
+  '@tanstack/ai-client@0.2.1':
+    resolution: {integrity: sha512-eniY0+uUfaxTvyYtsE9xRP34REEapDGSqDQtdlvckdz6mVuBFP2TlZTfZbVrovz5FH+PU1IUjxweRHHwwygDgQ==}
+
+  '@tanstack/ai-ollama@0.3.0':
+    resolution: {integrity: sha512-u/68bLsRehmFsfEcvmMS09yq5vuqOVJs51q1QvBLwxKwBoSzSIKFHArRSVW8W5RcBPdsYxnLyz9d0hcqUy2NjQ==}
+    peerDependencies:
+      '@tanstack/ai': ^0.2.1
+      zod: ^4.0.0
+
+  '@tanstack/ai-react@0.2.1':
+    resolution: {integrity: sha512-HjfOTwDlFzMKgrnfWz11Rn79idzoDYTmZVncoePQKR5z7b0sYwHD0MKGniMabFRxZpjsCiyUArwLHwUXToFumA==}
+    peerDependencies:
+      '@tanstack/ai': ^0.2.1
+      '@types/react': '>=18.0.0'
+      react: '>=18.0.0'
+
+  '@tanstack/ai@0.2.1':
+    resolution: {integrity: sha512-S0qtyAZXQeZkQCOp4RAgVI1Lk9zUsn8mYE2fuxET2ZDf5C1kVy2svK+dB0KU7xydTCdKadONNHP03XzXWbct0g==}
+    engines: {node: '>=18'}
+
   '@tanstack/devtools-client@0.0.3':
     resolution: {integrity: sha512-kl0r6N5iIL3t9gGDRAv55VRM3UIyMKVH83esRGq7xBjYsRLe/BeCIN2HqrlJkObUXQMKhy7i8ejuGOn+bDqDBw==}
     engines: {node: '>=18'}
@@ -1979,6 +2011,10 @@ packages:
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
 
+  dotenv@17.2.3:
+    resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
+    engines: {node: '>=12'}
+
   earcut@3.0.2:
     resolution: {integrity: sha512-X7hshQbLyMJ/3RPhyObLARM2sNxxmRALLKx1+NVFFnQ9gKzmCrxm9+uLIAdBcvc8FNLpctqlQ2V6AE92Ol9UDQ==}
 
@@ -2509,6 +2545,9 @@ packages:
   ol@10.7.0:
     resolution: {integrity: sha512-122U5gamPqNgLpLOkogFJhgpywvd/5en2kETIDW+Ubfi9lPnZ0G9HWRdG+CX0oP8od2d6u6ky3eewIYYlrVczw==}
 
+  ollama@0.6.3:
+    resolution: {integrity: sha512-KEWEhIqE5wtfzEIZbDCLH51VFZ6Z3ZSa6sIOg/E/tBV8S51flyqBOXi+bRxlOYKDf8i327zG9eSTb8IJxvm3Zg==}
+
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -2550,6 +2589,9 @@ packages:
 
   parse5@8.0.0:
     resolution: {integrity: sha512-9m4m5GSgXjL4AjumKzq1Fgfp3Z8rsvjRNbnkVwfu2ImRqE5D0LnY2QfDen18FSY9C573YU5XxSapdHZTZ2WolA==}
+
+  partial-json@0.1.7:
+    resolution: {integrity: sha512-Njv/59hHaokb/hRUjce3Hdv12wd60MtM9Z5Olmn+nehe0QDAsRtRbJPvJ0Z91TusF0SuZRIvnM+S4l6EIP8leA==}
 
   path-exists@4.0.0:
     resolution: {integrity: sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==}
@@ -3143,6 +3185,9 @@ packages:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
     deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+
+  whatwg-fetch@3.6.20:
+    resolution: {integrity: sha512-EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==}
 
   whatwg-mimetype@4.0.0:
     resolution: {integrity: sha512-QaKxh0eNIi2mE9p2vEdzfagOKHCcj1pJ56EEHGQOVxp8r9/iszLUUV7v89x9O1p/T+NlTM5W7jW6+cz4Fq1YVg==}
@@ -4136,6 +4181,28 @@ snapshots:
       tailwindcss: 4.1.18
       vite: 7.3.0(@types/node@22.19.3)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)
 
+  '@tanstack/ai-client@0.2.1':
+    dependencies:
+      '@tanstack/ai': 0.2.1
+
+  '@tanstack/ai-ollama@0.3.0(@tanstack/ai@0.2.1)(zod@3.25.76)':
+    dependencies:
+      '@tanstack/ai': 0.2.1
+      ollama: 0.6.3
+      zod: 3.25.76
+
+  '@tanstack/ai-react@0.2.1(@tanstack/ai@0.2.1)(@types/react@19.2.7)(react@19.2.3)':
+    dependencies:
+      '@tanstack/ai': 0.2.1
+      '@tanstack/ai-client': 0.2.1
+      '@types/react': 19.2.7
+      react: 19.2.3
+
+  '@tanstack/ai@0.2.1':
+    dependencies:
+      '@tanstack/devtools-event-client': 0.4.0
+      partial-json: 0.1.7
+
   '@tanstack/devtools-client@0.0.3':
     dependencies:
       '@tanstack/devtools-event-client': 0.3.5
@@ -4977,6 +5044,8 @@ snapshots:
       domelementtype: 2.3.0
       domhandler: 5.0.3
 
+  dotenv@17.2.3: {}
+
   earcut@3.0.2: {}
 
   electron-to-chromium@1.5.267: {}
@@ -5538,6 +5607,10 @@ snapshots:
       pbf: 4.0.1
       rbush: 4.0.1
 
+  ollama@0.6.3:
+    dependencies:
+      whatwg-fetch: 3.6.20
+
   optionator@0.9.4:
     dependencies:
       deep-is: 0.1.4
@@ -5615,6 +5688,8 @@ snapshots:
   parse5@8.0.0:
     dependencies:
       entities: 6.0.1
+
+  partial-json@0.1.7: {}
 
   path-exists@4.0.0: {}
 
@@ -6103,6 +6178,8 @@ snapshots:
   whatwg-encoding@3.1.1:
     dependencies:
       iconv-lite: 0.6.3
+
+  whatwg-fetch@3.6.20: {}
 
   whatwg-mimetype@4.0.0: {}
 

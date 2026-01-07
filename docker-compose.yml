@@ -1,0 +1,24 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - '11434:11434'
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    devices:
+      # Uncomment the 'deploy' section below if you have an NVIDIA GPU
+      - /dev/dri:/dev/dri
+      - /dev/kfd:/dev/kfd
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+    # Passing AMD devices to the container
+
+volumes:
+  ollama_data:
