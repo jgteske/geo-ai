@@ -7,10 +7,8 @@ export const Route = createFileRoute('/api/chat')({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        console.log('process', process)
         // Check for API key
         const ollamaServerUrl = process.env.OLLAMA_HOST
-        console.log('ollamaServerUrl', ollamaServerUrl)
         if (!ollamaServerUrl) {
           return new Response(
             JSON.stringify({
