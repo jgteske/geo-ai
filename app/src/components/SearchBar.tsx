@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Input } from './ui/input'
-import { Button } from './ui/button'
+import { Search } from 'lucide-react'
 import {
   transformNominatimBBoxToBBox,
   transformNominatimCoordToCoord,
 } from '@/support/transform'
-import { Spinner } from './ui/spinner'
 import { Coordinate } from 'ol/coordinate'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { Command, CommandGroup, CommandItem, CommandList } from './ui/command'
+import { useThrottledCallback } from '@tanstack/react-pacer/throttler'
 
 interface OnLocationSelectProps {
   coords?: Coordinate
@@ -19,51 +21,107 @@ interface SearchBarProps {
 
 export function SearchBar({ onLocationSelect }: SearchBarProps) {
   const [query, setQuery] = useState('')
+  const [results, setResults] = useState<any[]>([])
+  const [open, setOpen] = useState(false)
   const [searching, setSearching] = useState<boolean>(false)
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSearch = async (signal: AbortSignal) => {
     setSearching(true)
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${query}`,
-    )
-    const data = await response.json()
-
-    if (data && data.length > 0) {
-      const { lon, lat, boundingbox } = data[0]
-      // Map it to: [minLon, minLat, maxLon, maxLat]
-      const correctBbox = transformNominatimBBoxToBBox(boundingbox)
-      onLocationSelect({
-        coords: transformNominatimCoordToCoord(lat, lon),
-        extend: correctBbox,
-      })
-    } else {
-      alert('Location not found')
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=5`,
+        {
+          signal,
+        },
+      )
+      const data = await response.json()
+      setResults(data)
+      setOpen(data.length > 0)
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.log('Fetch aborted: newer search started')
+      } else {
+        console.error('Search failed', error)
+      }
+    } finally {
+      setSearching(false)
     }
-    setSearching(false)
+  }
+
+  // debouncing the search to wait for 100ms before getting triggered when typing
+  // this will prevent from triggering to many search requests for the api and reduce the load
+  const debouncedSearch = useThrottledCallback(handleSearch, { wait: 100 })
+
+  useEffect(() => {
+    // 1. Minimum character check
+    if (query.length < 3) {
+      setResults([])
+      setOpen(false)
+      return
+    }
+
+    const controller = new AbortController()
+    const signal = controller.signal
+
+    debouncedSearch(signal)
+
+    return () => {
+      controller.abort()
+    }
+  }, [query, debouncedSearch])
+
+  const handleSelect = (item: any) => {
+    const { lon, lat, boundingbox } = item
+    const correctBbox = transformNominatimBBoxToBBox(boundingbox)
+
+    onLocationSelect({
+      coords: transformNominatimCoordToCoord(lat, lon),
+      extend: correctBbox,
+    })
+
+    setQuery(item.display_name)
+    setOpen(false)
   }
 
   return (
-    <form
-      onSubmit={handleSearch}
-      //style={{ position: 'absolute', zIndex: 10, top: 10, left: 50 }}
-    >
-      <div className="flex w-full max-w-sm items-center gap-2">
-        <Input
-          value={query}
-          disabled={searching}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search for a city..."
-          style={{
-            padding: '8px',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-          }}
-        />
-        <Button disabled={searching} type="submit" variant="outline">
-          {searching ? <Spinner /> : 'Search'}
-        </Button>
-      </div>
-    </form>
+    <div className="w-full max-w-sm">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <div className="relative">
+            <Input
+              placeholder="Search for a city..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="pr-10" // Space for the spinner
+              isLoading={searching} // Using the loading prop we added earlier!
+            />
+          </div>
+        </PopoverTrigger>
+        <PopoverContent
+          className="p-0 w-[var(--radix-popover-trigger-width)]"
+          align="start"
+          // This prevents the popover from taking focus away from the input
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
+          <Command>
+            <CommandList>
+              <CommandGroup>
+                {results.map((item) => (
+                  <CommandItem
+                    key={item.place_id}
+                    value={item.display_name}
+                    onSelect={() => handleSelect(item)}
+                    className="cursor-pointer"
+                  >
+                    <Search className="mr-2 h-4 w-4 text-muted-foreground" />
+                    <span className="truncate">{item.display_name}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
   )
 }
